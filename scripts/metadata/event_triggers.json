@@ -1,0 +1,21 @@
+{
+  "type": "bulk",
+  "args": [
+    { "type": "pg_create_event_trigger", "args": {
+      "source": "default",
+      "name": "notify_on_notification_insert",
+      "table": { "schema": "public", "name": "notifications" },
+      "insert": { "columns": "*" },
+      "webhook": "http://functions:3000/sendNotification",
+      "retry_conf": { "num_retries": 1, "interval_sec": 5, "timeout_sec": 30 }
+    } },
+    { "type": "pg_create_event_trigger", "args": {
+      "source": "default",
+      "name": "start_run_on_trigger_event_insert",
+      "table": { "schema": "public", "name": "trigger_events" },
+      "insert": { "columns": "*" },
+      "webhook": "http://functions:3000/handleDbEvent",
+      "retry_conf": { "num_retries": 1, "interval_sec": 5, "timeout_sec": 60 }
+    } }
+  ]
+}

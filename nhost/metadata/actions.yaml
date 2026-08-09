@@ -1,6 +1,35 @@
-actions: []
+actions:
+  - name: approveStep
+    definition:
+      kind: synchronous
+      handler: http://functions:3000/approveStep
+      forward_client_headers: true
+      timeout: 120
+    permissions:
+      - role: user
+    comment: Authenticated resume of a paused approval_gate step. Handler checks approver's org role before resuming.
+  - name: triggerWorkflowRun
+    definition:
+      kind: synchronous
+      handler: http://functions:3000/triggerWorkflowRun
+      forward_client_headers: true
+      timeout: 120
+    permissions:
+      - role: user
+    comment: Authenticated manual/internal trigger. Handler verifies owner/editor role and quota before starting a run.
+  - name: triggerWorkflowRunWebhook
+    definition:
+      kind: synchronous
+      handler: http://functions:3000/triggerWorkflowRunWebhook
+      timeout: 120
+    permissions:
+      - role: public
+    comment: Public inbound webhook endpoint. Handler validates a per-trigger secret instead of a user JWT.
 custom_types:
   enums: []
   input_objects: []
-  objects: []
+  objects:
+    - name: TriggerWorkflowRunOutput
+    - name: TriggerWorkflowRunWebhookOutput
+    - name: ApproveStepOutput
   scalars: []

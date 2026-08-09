@@ -1,0 +1,63 @@
+table:
+  name: trigger_events
+  schema: public
+object_relationships:
+  - name: organization
+    using:
+      foreign_key_constraint_on: org_id
+  - name: workflow
+    using:
+      foreign_key_constraint_on: workflow_id
+insert_permissions:
+  - role: user
+    permission:
+      check:
+        _and:
+          - organization:
+              members:
+                _and:
+                  - user_id:
+                      _eq: X-Hasura-User-Id
+                  - role:
+                      _in:
+                        - owner
+                        - editor
+          - workflow:
+              organization:
+                members:
+                  _and:
+                    - user_id:
+                        _eq: X-Hasura-User-Id
+                    - role:
+                        _in:
+                          - owner
+                          - editor
+      columns:
+        - org_id
+        - workflow_id
+        - payload
+select_permissions:
+  - role: user
+    permission:
+      columns:
+        - id
+        - org_id
+        - workflow_id
+        - payload
+        - created_at
+      filter:
+        organization:
+          members:
+            user_id:
+              _eq: X-Hasura-User-Id
+event_triggers:
+  - name: start_run_on_trigger_event_insert
+    definition:
+      enable_manual: false
+      insert:
+        columns: '*'
+    retry_conf:
+      interval_sec: 5
+      num_retries: 1
+      timeout_sec: 60
+    webhook: http://functions:3000/handleDbEvent
