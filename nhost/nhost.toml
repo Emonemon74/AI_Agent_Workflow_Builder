@@ -8,6 +8,10 @@ value = '{{ secrets.GROQ_API_KEY }}'
 name = 'SLACK_WEBHOOK_URL'
 value = '{{ secrets.SLACK_WEBHOOK_URL }}'
 
+[[global.environment]]
+name = 'FUNCTIONS_BASE_URL'
+value = '{{ secrets.FUNCTIONS_BASE_URL }}'
+
 [hasura]
 version = 'v2.48.10-ce'
 adminSecret = '{{ secrets.HASURA_GRAPHQL_ADMIN_SECRET }}'

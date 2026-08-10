@@ -30,7 +30,7 @@
         "type": "mutation",
         "arguments": [ { "name": "workflow_id", "type": "uuid!" } ],
         "output_type": "TriggerWorkflowRunOutput",
-        "handler": "http://functions:3000/triggerWorkflowRun",
+        "handler": "{{FUNCTIONS_BASE_URL}}/triggerWorkflowRun",
         "forward_client_headers": true,
         "timeout": 120
       }
@@ -48,7 +48,7 @@
           { "name": "payload", "type": "json" }
         ],
         "output_type": "TriggerWorkflowRunWebhookOutput",
-        "handler": "http://functions:3000/triggerWorkflowRunWebhook",
+        "handler": "{{FUNCTIONS_BASE_URL}}/triggerWorkflowRunWebhook",
         "forward_client_headers": false,
         "timeout": 120
       }
@@ -62,7 +62,7 @@
         "type": "mutation",
         "arguments": [ { "name": "step_run_id", "type": "uuid!" } ],
         "output_type": "ApproveStepOutput",
-        "handler": "http://functions:3000/approveStep",
+        "handler": "{{FUNCTIONS_BASE_URL}}/approveStep",
         "forward_client_headers": true,
         "timeout": 120
       }

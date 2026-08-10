@@ -2,7 +2,7 @@ actions:
   - name: approveStep
     definition:
       kind: synchronous
-      handler: http://functions:3000/approveStep
+      handler: '{{FUNCTIONS_BASE_URL}}/approveStep'
       forward_client_headers: true
       timeout: 120
     permissions:
@@ -11,7 +11,7 @@ actions:
   - name: triggerWorkflowRun
     definition:
       kind: synchronous
-      handler: http://functions:3000/triggerWorkflowRun
+      handler: '{{FUNCTIONS_BASE_URL}}/triggerWorkflowRun'
       forward_client_headers: true
       timeout: 120
     permissions:
@@ -20,7 +20,7 @@ actions:
   - name: triggerWorkflowRunWebhook
     definition:
       kind: synchronous
-      handler: http://functions:3000/triggerWorkflowRunWebhook
+      handler: '{{FUNCTIONS_BASE_URL}}/triggerWorkflowRunWebhook'
       timeout: 120
     permissions:
       - role: public

@@ -6,7 +6,7 @@
       "name": "notify_on_notification_insert",
       "table": { "schema": "public", "name": "notifications" },
       "insert": { "columns": "*" },
-      "webhook": "http://functions:3000/sendNotification",
+      "webhook": "{{FUNCTIONS_BASE_URL}}/sendNotification",
       "retry_conf": { "num_retries": 1, "interval_sec": 5, "timeout_sec": 30 }
     } },
     { "type": "pg_create_event_trigger", "args": {
@@ -14,7 +14,7 @@
       "name": "start_run_on_trigger_event_insert",
       "table": { "schema": "public", "name": "trigger_events" },
       "insert": { "columns": "*" },
-      "webhook": "http://functions:3000/handleDbEvent",
+      "webhook": "{{FUNCTIONS_BASE_URL}}/handleDbEvent",
       "retry_conf": { "num_retries": 1, "interval_sec": 5, "timeout_sec": 60 }
     } }
   ]

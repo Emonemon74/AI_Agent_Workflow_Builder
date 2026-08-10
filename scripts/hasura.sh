@@ -5,5 +5,5 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 nhost dev hasura "$@" \
   --endpoint https://local.hasura.local.nhost.run \
-  --admin-secret nhost-admin-secret \
+  --admin-secret 'M8$kP9!zQ2vL7@xF4nR6tY1cW5hJ8s' \
   --insecure-skip-tls-verify

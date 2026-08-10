@@ -35,4 +35,4 @@ event_triggers:
       interval_sec: 5
       num_retries: 1
       timeout_sec: 30
-    webhook: http://functions:3000/sendNotification
+    webhook: '{{FUNCTIONS_BASE_URL}}/sendNotification'
