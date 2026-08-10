@@ -1,7 +1,11 @@
 import type { Request, Response } from 'express';
 import { adminGraphQL } from './_lib/hasura';
 
-const SLACK_WEBHOOK_URL = process.env.SLACK_WEBHOOK_URL || '';
+// nhost's secrets vault requires a non-empty value, so an unconfigured deployment
+// stores a placeholder here rather than a real URL - only treat it as configured
+// if it actually looks like a webhook URL.
+const rawSlackUrl = process.env.SLACK_WEBHOOK_URL || '';
+const SLACK_WEBHOOK_URL = rawSlackUrl.startsWith('http') ? rawSlackUrl : '';
 
 // Hasura Event Trigger webhook, fired on INSERT into public.notifications.
 // This is how the `notify` step type is implemented "as an Event Trigger"
