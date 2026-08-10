@@ -48,10 +48,15 @@ export function OrgProvider({ children }: { children: React.ReactNode }) {
   const memberships = useMemo(() => data?.org_members ?? [], [data]);
 
   useEffect(() => {
-    if (!currentOrgId && memberships.length > 0) {
+    if (!userId) {
+      setCurrentOrgId(null);
+      return;
+    }
+    if (memberships.length === 0) return;
+    if (!memberships.some((m) => m.organization.id === currentOrgId)) {
       setCurrentOrgId(memberships[0].organization.id);
     }
-  }, [memberships, currentOrgId]);
+  }, [memberships, currentOrgId, userId]);
 
   const currentRole = memberships.find((m) => m.organization.id === currentOrgId)?.role ?? null;
 
