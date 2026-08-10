@@ -93,7 +93,6 @@ async function insertNotification(orgId: string, workflowRunId: string, stepRunI
 
 async function runLoop(ctx: EngineContext, startIndex: number, initialPreviousOutput: unknown): Promise<EngineOutcome> {
   let previousOutput = initialPreviousOutput;
-  let externalCallCount = 0;
 
   for (let i = startIndex; i < ctx.steps.length; i++) {
     const step = ctx.steps[i];
@@ -166,7 +165,10 @@ async function runLoop(ctx: EngineContext, startIndex: number, initialPreviousOu
         completed_at: new Date().toISOString(),
       });
       previousOutput = output;
-      externalCallCount++;
+      // Incremented immediately (not batched at run-completion) so usage from
+      // calls made before an approval_gate pause is never lost - the run may
+      // be resumed in a separate invocation with its own local counter.
+      await incrementQuota(ctx.orgId, 1);
     } catch (err: any) {
       const message = err?.message ? String(err.message) : String(err);
       await updateStepRun(stepRunId, {
@@ -185,9 +187,6 @@ async function runLoop(ctx: EngineContext, startIndex: number, initialPreviousOu
   }
 
   await updateWorkflowRun(ctx.workflowRunId, { status: 'completed', completed_at: new Date().toISOString() });
-  if (externalCallCount > 0) {
-    await incrementQuota(ctx.orgId, externalCallCount);
-  }
   return { status: 'completed' };
 }
 
