@@ -14,7 +14,8 @@ export function getGraphqlUrl(): string {
     // Locally, the graphql.* subdomain 404s on this stack; hasura.* serves /v1/graphql directly.
     return 'https://local.hasura.local.nhost.run/v1/graphql';
   }
-  return `https://${subdomain}.graphql.${region}.nhost.run/v1/graphql`;
+  // Cloud: the graphql.* subdomain serves the endpoint at /v1 (not /v1/graphql).
+  return `https://${subdomain}.graphql.${region}.nhost.run/v1`;
 }
 
 export function getGraphqlWsUrl(): string {
