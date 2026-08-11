@@ -35,15 +35,23 @@ const WORKFLOW = gql`
 `;
 
 function WorkflowDetail({ id }: { id: string }) {
-  const { currentRole } = useOrg();
-  const canWrite = currentRole === 'owner' || currentRole === 'editor';
-  const isOwner = currentRole === 'owner';
+  const { memberships } = useOrg();
 
   const { data, loading, refetch } = useQuery<{
-    workflows_by_pk: { id: string; name: string; description: string | null; steps: Step[]; triggers: Trigger[] } | null;
+    workflows_by_pk: {
+      id: string;
+      name: string;
+      description: string | null;
+      org_id: string;
+      steps: Step[];
+      triggers: Trigger[];
+    } | null;
   }>(WORKFLOW, { variables: { id }, fetchPolicy: 'cache-and-network' });
 
   const wf = data?.workflows_by_pk;
+  const role = wf ? (memberships.find((m) => m.organization.id === wf.org_id)?.role ?? null) : null;
+  const canWrite = role === 'owner' || role === 'editor';
+  const isOwner = role === 'owner';
 
   return (
     <AuthGate>
