@@ -100,4 +100,4 @@ The schema ships with no seed data (organizations/users are meant to be created 
 
 ## Trigger types
 
-`manual` (frontend Run button → `triggerWorkflowRun` Action), `webhook` (public `triggerWorkflowRunWebhook` Action, secret-gated, no user JWT), `event` (Hasura Event Trigger on `trigger_events` insert), `scheduled` (defined in the schema/config but not wired to a cron function in this build — lowest priority per the assignment's "at least one non-manual trigger" bar, which webhook + event both already clear).
+`manual` (frontend Run button → `triggerWorkflowRun` Action), `webhook` (public `triggerWorkflowRunWebhook` Action, secret-gated, no user JWT), `event` (Hasura Event Trigger on `trigger_events` insert), `scheduled` (Hasura cron trigger fires `runScheduledTriggers` every minute; it matches each `scheduled` trigger's `config.cron` expression against the current time and starts a run for any that are due, deduping via `workflow_triggers.last_run_at` so a retried delivery can't double-fire the same minute).

@@ -1,1 +1,11 @@
-[]
+- name: run_scheduled_triggers
+  webhook: '{{FUNCTIONS_BASE_URL}}/runScheduledTriggers'
+  schedule: '* * * * *'
+  include_in_metadata: true
+  payload: {}
+  retry_conf:
+    num_retries: 1
+    timeout_sec: 60
+    tolerance_seconds: 21600
+  comment: Polls workflow_triggers of type 'scheduled' every minute and starts a run for any whose cron expression matches.
+
